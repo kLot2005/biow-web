@@ -1,5 +1,5 @@
 import React from 'react';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
+import { ComposedChart, Bar, Cell, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
 
 const BiorhythmChart = ({ data }) => {
     const gradientOffset = () => {
@@ -21,7 +21,7 @@ const BiorhythmChart = ({ data }) => {
     return (
         <div className="w-full h-96 bg-white/50 backdrop-blur rounded-2xl shadow-inner p-4 border border-white/40">
             <ResponsiveContainer width="100%" height="100%">
-                <AreaChart
+                <ComposedChart
                     data={data}
                     margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
                 >
@@ -54,6 +54,12 @@ const BiorhythmChart = ({ data }) => {
                     />
                     <ReferenceLine y={0} stroke="#000" strokeOpacity={0.2} />
 
+                    <Bar dataKey="barHeight" barSize={20} radius={[4, 4, 0, 0]} name="Сводный">
+                        {data.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={entry.color} fillOpacity={0.8} />
+                        ))}
+                    </Bar>
+
                     <Area
                         type="monotone"
                         dataKey="physical"
@@ -81,7 +87,7 @@ const BiorhythmChart = ({ data }) => {
                         tension={0.4}
                         name="Интеллектуальный"
                     />
-                </AreaChart>
+                </ComposedChart>
             </ResponsiveContainer>
         </div>
     );

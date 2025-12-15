@@ -1,28 +1,65 @@
-import { differenceInDays, addDays, format, startOfMonth, endOfMonth, getDaysInMonth } from 'date-fns';
+import { differenceInCalendarDays, getDaysInMonth, startOfMonth, addDays, format, addMonths } from 'date-fns';
 
 export const calculateBiorhythm = (birthDate, targetDate) => {
-    const daysLived = differenceInDays(targetDate, birthDate);
+    // t - number of days lived from birth to target date
+    // differenceInCalendarDays handles leap years correctly by counting actual calendar days
+    const t = differenceInCalendarDays(targetDate, birthDate);
+
+    // Formula: B(t) = sin(2 * PI * t / P) * 100%
+    const pi = Math.PI;
+
+    const physical = Math.sin((2 * pi * t) / 23) * 100;
+    const emotional = Math.sin((2 * pi * t) / 28) * 100;
+    const intellectual = Math.sin((2 * pi * t) / 33) * 100;
+    const mathIntegral = (physical + emotional + intellectual) / 3;
+    const integral = mathIntegral;
 
     return {
-        date: targetDate,
-        formattedDate: format(targetDate, 'd.MM'),
-        dayOfWeek: format(targetDate, 'eee'), // Mon, Tue...
-        physical: Math.sin(2 * Math.PI * daysLived / 23),
-        emotional: Math.sin(2 * Math.PI * daysLived / 28),
-        intellectual: Math.sin(2 * Math.PI * daysLived / 33),
-        critical: false // Logic to be added if needed (crossing zero)
+        physical,
+        emotional,
+        intellectual,
+        integral,
+        daysLived: t
     };
 };
 
-export const generateMonthData = (birthDate, targetMonthDate) => {
-    const start = startOfMonth(targetMonthDate);
-    const end = endOfMonth(targetMonthDate);
-    const days = [];
+export const generateMonthData = (birthDate, monthDate) => {
+    const start = startOfMonth(monthDate);
+    const daysInMonth = getDaysInMonth(monthDate);
+    const data = [];
 
-    let current = start;
-    while (current <= end) {
-        days.push(calculateBiorhythm(birthDate, current));
-        current = addDays(current, 1);
+    for (let i = 0; i < daysInMonth; i++) {
+        const currentDate = addDays(start, i);
+        const biorhythms = calculateBiorhythm(birthDate, currentDate);
+
+        data.push({
+            date: currentDate.toISOString(),
+            formattedDate: format(currentDate, 'd.MM'),
+            physical: biorhythms.physical,
+            emotional: biorhythms.emotional,
+            intellectual: biorhythms.intellectual,
+            integral: biorhythms.integral,
+            fullDate: format(currentDate, 'dd.MM.yyyy')
+        });
     }
-    return days;
+
+    return data;
+};
+
+export const generateMultipleMonthsData = (birthDate, startMonth, numberOfMonths = 3) => {
+    const monthsData = [];
+    
+    for (let i = 0; i < numberOfMonths; i++) {
+        const actualMonth = addMonths(startMonth, i);
+        const monthData = generateMonthData(birthDate, actualMonth);
+        const monthName = format(actualMonth, 'LLLL yyyy');
+        
+        monthsData.push({
+            month: actualMonth,
+            monthName: monthName,
+            data: monthData
+        });
+    }
+    
+    return monthsData;
 };

@@ -14,11 +14,40 @@ export const calculateBiorhythm = (birthDate, targetDate) => {
     const mathIntegral = (physical + emotional + intellectual) / 3;
     const integral = mathIntegral;
 
+    // Determine status and color based on integral (average)
+    // Using thresholds similar to HEAD chart logic or incoming logic adapted to %
+    // -100 to 100 scale.
+    // Incoming used: > 1.5 (on 3 sum) => > 50% avg.
+    // Chart used: > 40%
+    // I will use > 40% to match the chart.
+
+    let status = '';
+    let color = '';
+
+    if (integral > 40) {
+        status = 'Отлично';
+        color = '#69f0ae';
+    } else if (integral >= 0) {
+        status = 'Хорошо';
+        color = '#2e7d32';
+    } else if (integral > -40) {
+        status = 'Плохо';
+        color = '#c62828';
+    } else {
+        status = 'Совсем плохо';
+        color = '#ff5252';
+    }
+
     return {
+        date: targetDate,
+        formattedDate: format(targetDate, 'd.MM'),
+        dayOfWeek: format(targetDate, 'eee'),
         physical,
         emotional,
         intellectual,
         integral,
+        status,
+        color,
         daysLived: t
     };
 };
@@ -48,18 +77,18 @@ export const generateMonthData = (birthDate, monthDate) => {
 
 export const generateMultipleMonthsData = (birthDate, startMonth, numberOfMonths = 3) => {
     const monthsData = [];
-    
+
     for (let i = 0; i < numberOfMonths; i++) {
         const actualMonth = addMonths(startMonth, i);
         const monthData = generateMonthData(birthDate, actualMonth);
         const monthName = format(actualMonth, 'LLLL yyyy');
-        
+
         monthsData.push({
             month: actualMonth,
             monthName: monthName,
             data: monthData
         });
     }
-    
+
     return monthsData;
 };

@@ -3,7 +3,7 @@ import { useId } from 'react';
 
 const BiorhythmChart = ({ data, monthName }) => {
     const chartId = useId().replace(/:/g, '-');
-    
+
     const gradientOffset = () => {
         const dataMax = Math.max(...data.map((i) => Math.max(i.physical, i.emotional, i.intellectual)));
         const dataMin = Math.min(...data.map((i) => Math.min(i.physical, i.emotional, i.intellectual)));
@@ -60,9 +60,9 @@ const BiorhythmChart = ({ data, monthName }) => {
                     />
                     <YAxis domain={[-100, 100]} hide />
                     <Tooltip
-                        contentStyle={{ 
-                            borderRadius: '16px', 
-                            border: '1px solid rgba(255,255,255,0.5)', 
+                        contentStyle={{
+                            borderRadius: '16px',
+                            border: '1px solid rgba(255,255,255,0.5)',
                             boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
                             background: 'rgba(255,255,255,0.95)',
                             backdropFilter: 'blur(10px)'

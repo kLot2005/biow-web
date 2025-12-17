@@ -1,9 +1,20 @@
 {
   "name": "biow-web",
-  "private": true,
   "version": "0.0.0",
-  "main": "electron/main.cjs",
+  "private": true,
+  "description": "This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.",
+  "homepage": "https://github.com/kLot2005/biow-web#readme",
+  "bugs": {
+    "url": "https://github.com/kLot2005/biow-web/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kLot2005/biow-web.git"
+  },
+  "license": "ISC",
+  "author": "",
   "type": "module",
+  "main": "electron/main.cjs",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

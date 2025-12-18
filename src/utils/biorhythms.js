@@ -6,11 +6,21 @@ export const calculateBiorhythm = (birthDate, targetDate) => {
     const t = differenceInCalendarDays(targetDate, birthDate);
 
     // Formula: B(t) = sin(2 * PI * t / P) * 100%
-    const pi = Math.PI;
+    // Using precise astronomical cycles
+    // Physical: 23.688437 days
+    // Emotional: 28.426125 days
+    // Intellectual: 33.163812 days
 
-    const physical = Math.sin((2 * pi * t) / 23) * 100;
-    const emotional = Math.sin((2 * pi * t) / 28) * 100;
-    const intellectual = Math.sin((2 * pi * t) / 33) * 100;
+    const pi = Math.PI;
+    const periodPhys = 23.688437;
+    const periodEmot = 28.426125;
+    const periodIntel = 33.163812;
+
+    const physical = Math.sin((2 * pi * t) / periodPhys) * 100;
+    const emotional = Math.sin((2 * pi * t) / periodEmot) * 100;
+    const intellectual = Math.sin((2 * pi * t) / periodIntel) * 100;
+
+    // Average formula
     const mathIntegral = (physical + emotional + intellectual) / 3;
     const integral = mathIntegral;
 

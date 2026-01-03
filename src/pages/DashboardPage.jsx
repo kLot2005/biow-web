@@ -1,11 +1,12 @@
 import React, { useState, useMemo } from 'react';
 import { format, parse, addMonths, subMonths } from 'date-fns';
-import { ChevronLeft, ChevronRight, Calendar, LogOut } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Calendar, LogOut, User } from 'lucide-react';
 import BiorhythmChart from '../components/BiorhythmChart';
 import { generateMultipleMonthsData } from '../utils/biorhythms';
 
 const DashboardPage = ({ onLogout }) => {
   const [birthDate, setBirthDate] = useState('1973-03-16');
+  const [name, setName] = useState('');
   const [targetMonth, setTargetMonth] = useState(new Date());
   const [numberOfMonths, setNumberOfMonths] = useState(3);
 
@@ -40,18 +41,39 @@ const DashboardPage = ({ onLogout }) => {
       <div className="w-full max-w-7xl space-y-6 sm:space-y-8">
         {/* Controls Card */}
         <div className="glass rounded-2xl sm:rounded-3xl p-5 sm:p-8 flex flex-col lg:flex-row gap-6 lg:gap-8 lg:items-end justify-between animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
-          <div className="flex items-end gap-4 flex-1">
-            <div className="p-4 bg-gradient-to-br from-white/80 to-white/60 rounded-2xl shadow-lg border border-white/50 h-14 flex items-center justify-center">
-              <Calendar className="w-6 h-6 text-gray-600" strokeWidth={2} />
+
+          <div className="flex flex-col md:flex-row gap-6 flex-1 w-full">
+            {/* Name Input */}
+            <div className="flex items-end gap-4 flex-1">
+              <div className="p-4 bg-gradient-to-br from-white/80 to-white/60 rounded-2xl shadow-lg border border-white/50 h-14 flex items-center justify-center">
+                <User className="w-6 h-6 text-gray-600" strokeWidth={2} />
+              </div>
+              <div className="flex-1">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">ФИО</label>
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Ваше имя"
+                  className="w-full bg-white/50 backdrop-blur-sm border border-white/40 rounded-xl px-4 py-3 text-lg font-semibold text-gray-700 outline-none focus:ring-2 focus:ring-purple-400/50 focus:border-purple-400/50 transition-all shadow-sm h-14 placeholder:text-gray-400"
+                />
+              </div>
             </div>
-            <div className="flex-1">
-              <label className="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">Дата рождения</label>
-              <input
-                type="date"
-                value={birthDate}
-                onChange={(e) => setBirthDate(e.target.value)}
-                className="w-full bg-white/50 backdrop-blur-sm border border-white/40 rounded-xl px-4 py-3 text-lg font-semibold text-gray-700 outline-none focus:ring-2 focus:ring-purple-400/50 focus:border-purple-400/50 transition-all shadow-sm h-14"
-              />
+
+            {/* Date Input */}
+            <div className="flex items-end gap-4 flex-1">
+              <div className="p-4 bg-gradient-to-br from-white/80 to-white/60 rounded-2xl shadow-lg border border-white/50 h-14 flex items-center justify-center">
+                <Calendar className="w-6 h-6 text-gray-600" strokeWidth={2} />
+              </div>
+              <div className="flex-1">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">Дата рождения</label>
+                <input
+                  type="date"
+                  value={birthDate}
+                  onChange={(e) => setBirthDate(e.target.value)}
+                  className="w-full bg-white/50 backdrop-blur-sm border border-white/40 rounded-xl px-4 py-3 text-lg font-semibold text-gray-700 outline-none focus:ring-2 focus:ring-purple-400/50 focus:border-purple-400/50 transition-all shadow-sm h-14"
+                />
+              </div>
             </div>
           </div>
 
@@ -70,7 +92,7 @@ const DashboardPage = ({ onLogout }) => {
                 {format(targetMonth, 'LLLL yyyy')}
               </div>
             </div>
-            
+
             <div className="flex items-center gap-2 h-14 px-3 bg-white/40 backdrop-blur-sm rounded-xl border border-white/40">
               <label className="text-xs font-semibold uppercase tracking-wider text-gray-500 whitespace-nowrap">Месяцев:</label>
               <select
@@ -119,10 +141,11 @@ const DashboardPage = ({ onLogout }) => {
         {/* Charts */}
         <div className="space-y-6 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
           {monthsData.map((monthData, index) => (
-            <BiorhythmChart 
-              key={`month-${index}`} 
-              data={monthData.data} 
+            <BiorhythmChart
+              key={`month-${index}`}
+              data={monthData.data}
               monthName={monthData.monthName}
+              userName={name}
             />
           ))}
         </div>
@@ -169,5 +192,3 @@ const DashboardPage = ({ onLogout }) => {
 };
 
 export default DashboardPage;
-
-
